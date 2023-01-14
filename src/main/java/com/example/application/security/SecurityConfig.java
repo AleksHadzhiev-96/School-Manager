@@ -26,6 +26,21 @@ public class SecurityConfig extends VaadinWebSecurity {
   }
 
   @Override
+  protected void configure(HttpSecurity http) throws Exception
+  {
+
+    http.authorizeRequests()
+            .antMatchers("/").permitAll()
+            .antMatchers("/h2-console/**").permitAll();
+
+    super.configure(http);
+    setLoginView(http, LoginView.class,"/logout");
+
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+  }
+
+  /* @Override
   protected void configure(HttpSecurity http) throws Exception {
     // Authorize access to /images/ without authentication
     http.authorizeRequests().antMatchers("/images/**").permitAll();
@@ -33,7 +48,7 @@ public class SecurityConfig extends VaadinWebSecurity {
     // denies all other
     super.configure(http);
     setLoginView(http, LoginView.class, "/logout");
-  }
+  } */
 
   @Bean
   public InMemoryUserDetailsManager userDetailsService() {
